@@ -2,8 +2,11 @@
 const passport = require('passport');
 const bcrypt = require("bcryptjs");
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const {Users} = require('../models');
+require("dotenv").config();
 
+//Estrategia local
 passport.use(new LocalStrategy({
     usernameField: 'email'
 }, async (email, password, done) => {
@@ -22,6 +25,15 @@ passport.use(new LocalStrategy({
     }catch(error){
         done(error);
     }
+}));
+
+//Estrategia google OAuth 2.0
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENTID,
+    clientSecret: process.env.SECRET_GOOGLE,
+    callbackURL: process.env.GOOGLE_REDIRECT_URI
+}, (accessToken,refreshToken,profile,done)=>{
+    return done(null, profile)
 }));
 
 //Serialización
