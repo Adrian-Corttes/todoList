@@ -36,18 +36,24 @@ passport.use(new GoogleStrategy({
     return done(null, profile)
 }));
 
-//Serialización
-passport.serializeUser((user, done) => {
+///Serialización
+passport.serializeUser((profile, done) => {
     //Firmar los datos del usuario
-    return done(null, user.id);
+    return done(null, profile);
 });
 
 //Deserialización
-passport.deserializeUser(async(id, done) => {
+passport.deserializeUser(async(profile, done) => {
     //Vamos a obtener los datos del usuario a partir del ID
     try{
-        let user = await Users.findByPk(id, {plain: true});
-        done(null, user); //request -> request.user
+        if(profile.id.toString().length <= 10){
+            let user = await Users.findByPk(profile.id, {plain: true});
+            done(null, user); //request -> request.user
+        }
+        else{
+            //generado por google
+            done(null, profile);
+        } 
     }catch(error){
         done(error);
     }
