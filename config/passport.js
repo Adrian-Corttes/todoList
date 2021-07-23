@@ -52,6 +52,8 @@ passport.deserializeUser(async(profile, done) => {
         }
         else{
             //generado por google
+            profile.firstname = profile.name.givenName;
+            profile.lastname = profile.name.familyName;
             done(null, profile);
         } 
     }catch(error){
