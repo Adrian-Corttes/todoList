@@ -34,6 +34,7 @@ const passportLocalStrategy = passport.authenticate("local", {
 });
 
 const passportgoogleStrategy = passport.authenticate("google", {session: true, scope:['email','profile']});
+const passportFBStrategy = passport.authenticate("facebook", {session: true, scope:['email','public_profile']});
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -61,7 +62,14 @@ app.get("/registro", (req, res, next) => {
 
 app.get("/auth/google", passportgoogleStrategy);
 
+app.get("/auth/facebook", passportFBStrategy);
+
 app.get("/auth/google/callback", passport.authenticate('google', {
+    successRedirect: '/categorias',
+    failureRedirect: '/login'
+}));
+
+app.get("/auth/facebook/callback", passport.authenticate('facebook', {
     successRedirect: '/categorias',
     failureRedirect: '/login'
 }));
