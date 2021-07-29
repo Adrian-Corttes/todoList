@@ -37,4 +37,4 @@ app.get("/", (req, res, next) => {
 app.use(authRouter);
 app.use(catRouter);
 
-module.exports = app;
+module.exports = app; 
